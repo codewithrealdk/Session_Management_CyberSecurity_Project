@@ -1,0 +1,6 @@
+node_modules/
+app.db
+*.log
+cookies*.txt
+fixation_cookie.txt
+login_response.html

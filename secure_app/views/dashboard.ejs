@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard — Hardened App</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    .banner { background: #e9ffe9; border: 1px solid #b5f5b5; padding: 8px; margin-bottom: 16px; font-size: 13px; }
+    .session-box { background: #f4f4f4; padding: 10px; font-family: monospace; margin: 16px 0; word-break: break-all; }
+    textarea { width: 100%; height: 60px; }
+    .msg { border-bottom: 1px solid #eee; padding: 6px 0; }
+  </style>
+</head>
+<body>
+  <div class="banner">This is the Hardened Version of the app -> No attacks here :) This one is secured buddy.</div>
+  <h2>Welcome, <%= user.username %></h2>
+  <p><a href="/logout">Logout</a></p>
+
+  <div class="session-box">
+    <strong>Session ID (server-side):</strong> <%= sessionId %><br>
+    <strong>Raw cookie via JS:</strong>
+    <span id="cookie-display"></span>
+    (should be empty/blank — httpOnly blocks JS from reading it)
+  </div>
+  <script>
+    document.getElementById('cookie-display').textContent = document.cookie || '(nothing readable)';
+  </script>
+
+  <h3>Message Board (fixed: output is escaped)</h3>
+  <form method="POST" action="/comment">
+    <textarea name="text" placeholder="Try posting <script> here again — it will be shown as plain text, not executed"></textarea>
+    <button type="submit">Post</button>
+  </form>
+
+  <div>
+    <% messages.forEach(m => { %>
+      <div class="msg">
+        <strong><%= m.user %>:</strong>
+        <!-- FIX: escaped output (<%= %>) instead of raw (<%- %>) -->
+        <%= m.text %>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

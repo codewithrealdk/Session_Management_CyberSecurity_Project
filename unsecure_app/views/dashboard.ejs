@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard — Vulnerable App</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    .banner { background: #ffe9e9; border: 1px solid #f5b5b5; padding: 8px; margin-bottom: 16px; font-size: 13px; }
+    .session-box { background: #f4f4f4; padding: 10px; font-family: monospace; margin: 16px 0; word-break: break-all; }
+    textarea { width: 100%; height: 60px; }
+    .msg { border-bottom: 1px solid #eee; padding: 6px 0; }
+  </style>
+</head>
+<body>
+  <div class="banner">This is unsecured version of the app. Attacks possible here ):</div>
+  <h2>Welcome, <%= user.username %></h2>
+  <p><a href="/logout">Logout</a></p>
+
+  <div class="session-box">
+    <strong>Session ID (server-side):</strong> <%= sessionId %><br>
+    <strong>Raw cookie (client-readable, since httpOnly=false):</strong>
+    <span id="cookie-display"></span>
+  </div>
+  <script>
+    document.getElementById('cookie-display').textContent = document.cookie;
+  </script>
+
+  <h3>Message Board (intentionally vulnerable to stored XSS)</h3>
+  <form method="POST" action="/comment">
+    <textarea name="text" placeholder="Write a comment... try posting <script> here for the XSS demo"></textarea>
+    <button type="submit">Post</button>
+  </form>
+
+  <div>
+    <% messages.forEach(m => { %>
+      <div class="msg">
+        <strong><%= m.user %>:</strong>
+        <!-- VULN: rendered unescaped with <%- %> so injected <script> tags execute -->
+        <%- m.text %>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

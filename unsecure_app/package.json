@@ -1,0 +1,18 @@
+{
+  "name": "vulnerable-session-app",
+  "version": "1.0.0",
+  "description": "Intentionally vulnerable session management demo (for local educational use only)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "better-sqlite3": "^11.3.0",
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.10",
+    "cookie-parser": "^1.4.6",
+    "cookie-signature": "^1.2.2"
+  }
+}
